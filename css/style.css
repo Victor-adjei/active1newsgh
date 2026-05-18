@@ -565,6 +565,39 @@ a {
     .nav-links, .nav-actions .icon-btn, .subscribe-btn {
         display: none;
     }
+    .glass-nav.active .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-glass);
+        padding: 20px 24px;
+        gap: 15px;
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        animation: navSlideDown 0.3s ease forwards;
+    }
+    .glass-nav.active .nav-links a {
+        font-size: 1.1rem;
+        font-weight: 600;
+        width: 100%;
+        padding: 10px 0;
+        display: block;
+        color: var(--text-main);
+    }
+    .glass-nav.active .nav-links a::after {
+        display: none;
+    }
+    @keyframes navSlideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
     .menu-toggle {
         display: block;
     }

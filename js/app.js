@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuToggle && mainNav) {
         menuToggle.addEventListener('click', () => {
             mainNav.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                if (mainNav.classList.contains('active')) {
+                    icon.className = 'fa-solid fa-xmark';
+                } else {
+                    icon.className = 'fa fa-bars';
+                }
+            }
         });
     }
 
