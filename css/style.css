@@ -441,27 +441,29 @@ a {
 /* Footer */
 .modern-footer {
     background: #f8fafc;
-    margin-top: 100px;
+    margin-top: 45px;
     border-top: 1px solid var(--border-glass);
 }
 .footer-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1.5fr;
-    gap: 60px;
-    padding: 80px 24px;
+    gap: 30px;
+    padding: 40px 24px;
 }
 .footer-brand p {
     color: var(--text-muted);
-    margin: 20px 0;
-    max-width: 300px;
+    margin: 10px 0 15px 0;
+    max-width: 320px;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 .social-links {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 .social-links a {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: #ffffff;
     display: flex;
@@ -469,25 +471,34 @@ a {
     align-items: center;
     color: var(--text-main);
     border: 1px solid var(--border-glass);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 .social-links a:hover {
     background: var(--accent);
     border-color: var(--accent);
+    color: #ffffff;
+    transform: translateY(-2px);
 }
 
 .footer-widget h3 {
     font-family: var(--font-heading);
-    margin-bottom: 25px;
-    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .footer-widget ul {
     list-style: none;
 }
 .footer-widget ul li {
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 .footer-widget ul a {
     color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
 }
 .footer-widget ul a:hover {
     color: var(--accent);
@@ -495,17 +506,18 @@ a {
 
 .subscribe-form {
     display: flex;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .subscribe-form input {
     flex: 1;
     background: #ffffff;
     border: 1px solid var(--border-glass);
-    padding: 12px 15px;
+    padding: 8px 12px;
     color: var(--text-main);
     border-radius: 4px 0 0 4px;
     outline: none;
     font-family: var(--font-body);
+    font-size: 0.9rem;
 }
 .subscribe-form input:focus {
     border-color: var(--accent);
@@ -514,21 +526,22 @@ a {
     background: var(--accent);
     color: white;
     border: none;
-    padding: 0 20px;
+    padding: 0 15px;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
     transition: background 0.3s;
+    font-size: 0.9rem;
 }
 .subscribe-form button:hover {
     background: var(--accent-hover);
 }
 
 .footer-bottom {
-    padding: 25px 24px;
+    padding: 15px 24px;
     border-top: 1px solid var(--border-glass);
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 /* Responsive Overrides */
@@ -560,11 +573,12 @@ a {
     }
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 20px;
+        padding: 30px 24px;
         text-align: center;
     }
     .footer-brand p {
-        margin: 20px auto;
+        margin: 10px auto;
     }
     .social-links {
         justify-content: center;
