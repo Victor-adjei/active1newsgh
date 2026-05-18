@@ -23,6 +23,9 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
+            <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <div class="sidebar-header">
                 <a href="index.html" class="logo">Active<span class="accent">1</span>AdminGH</a>
             </div>
@@ -46,6 +49,9 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
+                <button class="menu-toggle" id="menuToggleBtn" aria-label="Open menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
                 <div class="search-bar">
                     <i class="fa fa-search"></i>
                     <input type="text" placeholder="Search articles, categories...">
@@ -275,9 +281,10 @@
                 </div>
             </div>
         </main>
-    </div>
+        <!-- Backdrop Overlay for Mobile Navigation -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Script -->
-    <script src="js/admin.js"></script>
-</body>
-</html>
+        <!-- Script -->
+        <script src="js/admin.js"></script>
+    </body>
+    </html>

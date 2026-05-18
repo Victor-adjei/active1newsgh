@@ -448,6 +448,38 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAdminTable();
     renderUsersTable();
 
+    // Mobile Navigation Drawer Toggle Logic
+    const menuToggleBtn = document.getElementById('menuToggleBtn');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    const openSidebar = () => {
+        if (sidebar && sidebarOverlay) {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    const closeSidebar = () => {
+        if (sidebar && sidebarOverlay) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    };
+
+    if (menuToggleBtn) {
+        menuToggleBtn.addEventListener('click', openSidebar);
+    }
+    if (sidebarCloseBtn) {
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+    }
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
     // Sidebar Navigation Logic
     const sidebarLinks = document.querySelectorAll('#adminSidebar a');
     const statsGrid = document.getElementById('adminStatsGrid');
@@ -509,6 +541,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         pageHeaderTitle.innerText = 'Global Settings';
                         panelSettings.style.display = 'block';
                     }
+                }
+
+                // Close mobile sidebar drawer if open
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
                 }
             });
         });
