@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Supabase Client
+    const supabaseUrl = 'https://ymvbgydxdtpodiuqvfgj.supabase.co';
+    const supabaseKey = 'sb_publishable_fVUQi5fULk173enaoK138g_vDjLvIzR';
+    const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+
     // Mobile Menu Toggle
     const menuToggle = document.getElementById('menuToggle');
     const mainNav = document.getElementById('mainNav');
@@ -9,13 +14,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Render Articles function (filters dynamically!)
-    window.renderArticles = function(filterCategory = 'all') {
+    // Render Articles function (filters dynamically from Supabase!)
+    window.renderArticles = async function(filterCategory = 'all') {
         const bentoGrid = document.getElementById('bentoGrid');
         const latestNewsGrid = document.getElementById('latestNewsGrid');
         if (!bentoGrid || !latestNewsGrid) return;
 
-        const savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+        let savedArticles = [];
+        if (supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('articles')
+                    .select('*')
+                    .order('timestamp', { ascending: false });
+                if (!error && data) {
+                    savedArticles = data;
+                } else {
+                    console.error("Supabase fetch error:", error);
+                    savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+                }
+            } catch (err) {
+                console.error("Failed to connect to Supabase:", err);
+                savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+            }
+        } else {
+            savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+        }
+
+        // Cache it globally for search and detailed viewing without multiple fetch hits
+        window.loadedArticles = savedArticles;
+
         if (savedArticles.length === 0) {
             bentoGrid.innerHTML = '';
             latestNewsGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); margin-top:40px;">No articles published yet.</p>`;
@@ -23,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Sort newest first
-        let articles = savedArticles.slice().reverse();
+        let articles = savedArticles.slice();
 
         // Apply Category Filter
         if (filterCategory !== 'all') {
@@ -232,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Article Modal Handler
     window.openArticleDetail = function(articleTimestamp) {
-        const savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+        const savedArticles = window.loadedArticles || JSON.parse(localStorage.getItem('active1news_articles')) || [];
         const actualIdx = savedArticles.findIndex(a => a.timestamp === parseFloat(articleTimestamp));
         if (actualIdx === -1) return;
         const article = savedArticles[actualIdx];
@@ -332,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Bind comment form submit dynamically for this specific article
         const commentForm = document.getElementById('commentForm');
         if (commentForm) {
-            commentForm.onsubmit = function(e) {
+            commentForm.onsubmit = async function(e) {
                 e.preventDefault();
                 const nameInput = document.getElementById('commenterName');
                 const textInput = document.getElementById('commenterText');
@@ -342,8 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (!commenterText) return;
                 
-                const savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
-                const currentArticle = savedArticles[actualIdx];
+                const currentArticle = article;
                 if (!currentArticle) return;
                 
                 if (!currentArticle.comments) currentArticle.comments = [];
@@ -353,8 +380,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     timestamp: Date.now()
                 });
                 
-                savedArticles[actualIdx] = currentArticle;
-                localStorage.setItem('active1news_articles', JSON.stringify(savedArticles));
+                // Save it back to Supabase
+                if (supabase) {
+                    try {
+                        const { error } = await supabase
+                            .from('articles')
+                            .update({ comments: currentArticle.comments })
+                            .eq('timestamp', currentArticle.timestamp);
+                        if (error) console.error("Error saving comment to Supabase:", error);
+                    } catch(err) {
+                        console.error("Supabase failed:", err);
+                    }
+                }
+                
+                // Keep local storage in sync as a backup
+                const localArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+                const localIdx = localArticles.findIndex(a => a.timestamp === currentArticle.timestamp);
+                if (localIdx !== -1) {
+                    localArticles[localIdx] = currentArticle;
+                    localStorage.setItem('active1news_articles', JSON.stringify(localArticles));
+                }
                 
                 // Clear text field
                 nameInput.value = '';
@@ -470,9 +515,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const savedArticles = JSON.parse(localStorage.getItem('active1news_articles')) || [];
+            const savedArticles = window.loadedArticles || JSON.parse(localStorage.getItem('active1news_articles')) || [];
             // Map articles to their index in the reversed list (which window.openArticleDetail expects)
-            const reversedArticles = savedArticles.slice().reverse();
+            const reversedArticles = savedArticles.slice();
 
             const matches = [];
             reversedArticles.forEach((article, index) => {

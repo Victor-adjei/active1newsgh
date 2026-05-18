@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Supabase Client
+    const supabaseUrl = 'https://ymvbgydxdtpodiuqvfgj.supabase.co';
+    const supabaseKey = 'sb_publishable_fVUQi5fULk173enaoK138g_vDjLvIzR';
+    const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+
     const publishForm = document.getElementById('publishForm');
     const adminTable = document.getElementById('adminArticlesTable');
     
-    let editingIndex = null; // Track if we are editing an article
+    window.editingTimestamp = null; // Track if we are editing an article by timestamp instead of index
 
     // Initialize Articles LocalStorage if empty
     if (!localStorage.getItem('active1news_articles')) {
@@ -26,9 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('active1news_users')) || [];
     }
 
-    function renderAdminTable() {
+    async function renderAdminTable() {
         if (!adminTable) return;
-        const articles = getArticles();
+        
+        let articles = [];
+        if (supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('articles')
+                    .select('*')
+                    .order('timestamp', { ascending: false });
+                if (!error && data) {
+                    articles = data;
+                } else {
+                    console.error("Supabase articles fetch failed:", error);
+                    articles = getArticles().slice().reverse();
+                }
+            } catch (err) {
+                console.error(err);
+                articles = getArticles().slice().reverse();
+            }
+        } else {
+            articles = getArticles().slice().reverse();
+        }
+
+        // Cache globally for edit/delete lookups
+        window.adminArticles = articles;
         
         const statTotalArticles = document.getElementById('statTotalArticles');
         if (statTotalArticles) {
@@ -40,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        adminTable.innerHTML = articles.slice().reverse().map((article, index) => {
+        adminTable.innerHTML = articles.map((article) => {
             const badgeClasses = {
                 'news': 'badge-news',
                 'entertainment': 'badge-ent',
@@ -50,9 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             const badgeClass = badgeClasses[article.category] || 'badge-news';
             const dateStr = new Date(article.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            
-            // Calculate the actual index in the original array
-            const realIndex = articles.length - 1 - index;
 
             return `
                 <tr>
@@ -60,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><span class="badge ${badgeClass}">${article.category.charAt(0).toUpperCase() + article.category.slice(1)}</span></td>
                     <td>${dateStr}</td>
                     <td class="td-actions">
-                        <button class="btn-icon" onclick="editArticle(${realIndex})" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-icon danger" onclick="deleteArticle(${realIndex})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-icon" onclick="editArticle(${article.timestamp})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-icon danger" onclick="deleteArticle(${article.timestamp})" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             `;
@@ -110,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle form submission
     if (publishForm) {
-        publishForm.addEventListener('submit', (e) => {
+        publishForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const title = document.getElementById('artTitle').value;
@@ -119,93 +144,167 @@ document.addEventListener('DOMContentLoaded', () => {
             const isVideo = document.getElementById('isVideo').checked;
             const content = document.getElementById('artContent').value;
             const fileUpload = document.getElementById('artFileUpload');
-            
-            const saveOrUpdateArticle = (finalMediaUrl, fileIsVideo) => {
-                const articles = getArticles();
+            const submitBtn = publishForm.querySelector('button[type="submit"]');
+
+            // Change button to loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving to Cloud...';
+            submitBtn.style.background = '#3b82f6';
+
+            try {
+                let finalMediaUrl = mediaUrl;
+                let fileIsVideo = isVideo;
+
+                // Handle file upload to Supabase Storage if a file was selected!
+                if (fileUpload && fileUpload.files.length > 0) {
+                    const file = fileUpload.files[0];
+                    fileIsVideo = file.type.startsWith('video/');
+                    
+                    if (supabase) {
+                        const fileExt = file.name.split('.').pop();
+                        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+                        const filePath = `uploads/${fileName}`;
+
+                        // Upload file to Supabase Public Bucket 'media'
+                        const { data, error } = await supabase.storage
+                            .from('media')
+                            .upload(filePath, file, {
+                                cacheControl: '3600',
+                                upsert: true
+                            });
+
+                        if (error) {
+                            throw new Error("Supabase cloud upload failed: " + error.message);
+                        }
+
+                        // Get public URL
+                        const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(filePath);
+                        finalMediaUrl = publicUrl;
+                    } else {
+                        // Local fallback to Base64 (fails for files > 5MB due to standard browser limits)
+                        const readBase64 = () => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = (e) => resolve(e.target.result);
+                            reader.onerror = (err) => reject(err);
+                            reader.readAsDataURL(file);
+                        });
+                        finalMediaUrl = await readBase64();
+                    }
+                }
+
                 const finalIsVideo = isVideo || fileIsVideo;
                 
-                if (editingIndex !== null) {
-                    // Update existing article
-                    articles[editingIndex] = {
-                        ...articles[editingIndex],
-                        title,
-                        category,
-                        mediaUrl: finalMediaUrl || articles[editingIndex].mediaUrl, // Keep old media if no new media provided
-                        isVideo: finalIsVideo,
-                        content,
-                        timestamp: Date.now() // Update timestamp to refresh sorting
-                    };
-                    editingIndex = null;
-                } else {
-                    // Create new article
-                    const newArticle = {
-                        title,
-                        category,
-                        mediaUrl: finalMediaUrl,
-                        isVideo: finalIsVideo,
-                        content,
-                        timestamp: Date.now()
-                    };
-                    articles.push(newArticle);
-                }
-                
-                try {
-                    localStorage.setItem('active1news_articles', JSON.stringify(articles));
-                    
-                    const submitBtn = publishForm.querySelector('button[type="submit"]');
-                    submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Saved Successfully!';
-                    submitBtn.style.background = '#10b981';
-                    
-                    // Remove Cancel button if it exists
-                    const cancelBtn = document.getElementById('cancelEditBtn');
-                    if (cancelBtn) cancelBtn.remove();
-                    
-                    publishForm.reset();
-                    renderAdminTable();
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = 'Publish Article';
-                        submitBtn.style.background = '';
-                    }, 2000);
-                } catch (error) {
-                    if (error.name === 'QuotaExceededError') {
-                        alert("⚠️ Storage Limit Exceeded!\n\nThe video or image file you selected is too large for the local browser database (standard 5MB limit).\n\nTo save this article, please select a smaller file (under 2MB) or paste any YouTube video/image URL instead. This limitation will be completely bypassed when we deploy live with cloud storage!");
+                if (supabase) {
+                    if (window.editingTimestamp !== null) {
+                        // Update existing article in Supabase
+                        const { error } = await supabase
+                            .from('articles')
+                            .update({
+                                title,
+                                category,
+                                mediaUrl: finalMediaUrl,
+                                isVideo: finalIsVideo,
+                                content,
+                                timestamp: Date.now() // Update timestamp to refresh sorting
+                            })
+                            .eq('timestamp', window.editingTimestamp);
+                        
+                        if (error) throw new Error("Supabase update error: " + error.message);
+                        window.editingTimestamp = null;
                     } else {
-                        alert("Error saving article: " + error.message);
+                        // Create new article in Supabase
+                        const { error } = await supabase
+                            .from('articles')
+                            .insert([{
+                                title,
+                                category,
+                                mediaUrl: finalMediaUrl,
+                                isVideo: finalIsVideo,
+                                content,
+                                timestamp: Date.now(),
+                                comments: []
+                            }]);
+                        
+                        if (error) throw new Error("Supabase insert error: " + error.message);
                     }
-                    const submitBtn = publishForm.querySelector('button[type="submit"]');
+                } else {
+                    // Local fallback
+                    const articles = getArticles();
+                    if (window.editingTimestamp !== null) {
+                        const idx = articles.findIndex(a => a.timestamp === window.editingTimestamp);
+                        if (idx !== -1) {
+                            articles[idx] = {
+                                ...articles[idx],
+                                title,
+                                category,
+                                mediaUrl: finalMediaUrl || articles[idx].mediaUrl,
+                                isVideo: finalIsVideo,
+                                content,
+                                timestamp: Date.now()
+                            };
+                        }
+                        window.editingTimestamp = null;
+                    } else {
+                        articles.push({
+                            title,
+                            category,
+                            mediaUrl: finalMediaUrl,
+                            isVideo: finalIsVideo,
+                            content,
+                            timestamp: Date.now(),
+                            comments: []
+                        });
+                    }
+                    localStorage.setItem('active1news_articles', JSON.stringify(articles));
+                }
+
+                // Push custom localStorage alert event so public site gets the unread badge
+                const currentAlerts = JSON.parse(localStorage.getItem('active1news_notifications')) || [];
+                currentAlerts.unshift({
+                    id: Date.now(),
+                    text: `🚨 Breaking Update: "${title.substring(0, 30)}..." has been published under ${category.toUpperCase()}!`,
+                    timestamp: Date.now(),
+                    unread: true
+                });
+                localStorage.setItem('active1news_notifications', JSON.stringify(currentAlerts.slice(0, 5)));
+
+                submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Saved Successfully!';
+                submitBtn.style.background = '#10b981';
+                
+                // Remove Cancel button if it exists
+                const cancelBtn = document.getElementById('cancelEditBtn');
+                if (cancelBtn) cancelBtn.remove();
+                
+                publishForm.reset();
+                await renderAdminTable();
+                
+                setTimeout(() => {
+                    submitBtn.disabled = false;
                     submitBtn.innerHTML = 'Publish Article';
                     submitBtn.style.background = '';
-                }
-            };
+                }, 2000);
 
-            // If a file was uploaded directly, convert it to Base64
-            if (fileUpload && fileUpload.files.length > 0) {
-                const file = fileUpload.files[0];
-                const isUploadedVideo = file.type.startsWith('video/');
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    saveOrUpdateArticle(e.target.result, isUploadedVideo);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                saveOrUpdateArticle(mediaUrl, false);
+            } catch (error) {
+                alert("⚠️ Error saving article: " + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Publish Article';
+                submitBtn.style.background = '';
             }
         });
     }
 
     // Global function to trigger edit mode for articles
-    window.editArticle = function(realIndex) {
-        const articles = getArticles();
-        const article = articles[realIndex];
+    window.editArticle = function(timestamp) {
+        const articles = window.adminArticles || getArticles();
+        const article = articles.find(a => a.timestamp === parseFloat(timestamp));
         if (!article) return;
 
-        editingIndex = realIndex;
+        window.editingTimestamp = parseFloat(timestamp);
 
         // Fill form fields
         document.getElementById('artTitle').value = article.title;
         document.getElementById('artCategory').value = article.category;
-        document.getElementById('artMedia').value = article.mediaUrl.startsWith('data:') ? '' : article.mediaUrl;
+        document.getElementById('artMedia').value = article.mediaUrl.startsWith('http') ? article.mediaUrl : '';
         document.getElementById('isVideo').checked = article.isVideo;
         document.getElementById('artContent').value = article.content;
 
@@ -227,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelBtn.innerText = 'Cancel Editing';
             cancelBtn.addEventListener('click', () => {
                 publishForm.reset();
-                editingIndex = null;
+                window.editingTimestamp = null;
                 submitBtn.innerHTML = 'Publish Article';
                 submitBtn.style.background = '';
                 submitBtn.style.color = '';
@@ -241,15 +340,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     // Global function for deletion
-    window.deleteArticle = function(realIndex) {
+    window.deleteArticle = async function(timestamp) {
         if(confirm("Are you sure you want to delete this article?")) {
-            const articles = getArticles();
-            articles.splice(realIndex, 1);
-            localStorage.setItem('active1news_articles', JSON.stringify(articles));
-            renderAdminTable();
+            if (supabase) {
+                try {
+                    const { error } = await supabase
+                        .from('articles')
+                        .delete()
+                        .eq('timestamp', parseFloat(timestamp));
+                    if (error) {
+                        alert("Error deleting from Supabase: " + error.message);
+                        return;
+                    }
+                } catch(err) {
+                    console.error("Supabase delete failed:", err);
+                }
+            }
+
+            // Sync fallback
+            const localArticles = getArticles();
+            const updated = localArticles.filter(a => a.timestamp !== parseFloat(timestamp));
+            localStorage.setItem('active1news_articles', JSON.stringify(updated));
+
+            await renderAdminTable();
             
             // Cancel current edit if the deleted article was being edited
-            if(editingIndex === realIndex) {
+            if(window.editingTimestamp === parseFloat(timestamp)) {
                 const cancelBtn = document.getElementById('cancelEditBtn');
                 if (cancelBtn) cancelBtn.click();
             }
