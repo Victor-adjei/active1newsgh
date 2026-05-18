@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active1AdminGH - Login</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <!-- Abstract Background Lights -->
+    <div class="bg-glow bg-glow-left"></div>
+    <div class="bg-glow bg-glow-right"></div>
+
+    <div class="login-wrapper">
+        <div class="login-card" id="loginCard">
+            <div class="card-header">
+                <a href="index.html" class="logo">Active<span class="accent">1</span>AdminGH</a>
+                <p>Welcome back. Please sign in to access your portal.</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <!-- Error Alert -->
+                <div class="error-alert" id="errorAlert" style="display: none;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span id="errorMessage">Invalid username or password.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" id="username" placeholder="Enter username..." required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="Enter password..." required>
+                    </div>
+                </div>
+
+                <div class="forgot-wrapper">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link" onclick="alert('In a production environment, this will trigger a password reset link to your email.'); event.preventDefault();">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <span>Sign In</span>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+
+            <div class="card-footer">
+                <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Return to Public Site</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="js/login.js"></script>
+</body>
+</html>

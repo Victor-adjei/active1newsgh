@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active1AdminGH - Dashboard</title>
+    <!-- Instant Protection Script -->
+    <script>
+        if (localStorage.getItem('active1news_logged_in') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">Active<span class="accent">1</span>AdminGH</a>
+            </div>
+            <nav class="sidebar-nav" id="adminSidebar">
+                <a href="#" class="active" data-view="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" data-view="articles"><i class="fa-solid fa-newspaper"></i> All Articles</a>
+                <a href="#" data-view="write"><i class="fa-solid fa-pen-to-square"></i> Write New Post</a>
+                <a href="#" data-view="categories"><i class="fa-solid fa-layer-group"></i> Categories</a>
+                <a href="#" data-view="users"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="#" data-view="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+            <div class="sidebar-footer" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                <button id="adminLogoutBtn" class="back-link" style="border: none; background: none; font-family: inherit; font-size: inherit; cursor: pointer; color: var(--text-muted); width: 100%; text-align: left; display: flex; align-items: center; gap: 8px; padding: 0;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+                <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> View Public Site</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="Search articles, categories...">
+                </div>
+                <div class="user-profile">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=ff003c&color=fff" alt="Admin">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-inner">
+                <div class="page-header">
+                    <h2>Dashboard Overview</h2>
+                    <button class="btn-primary"><i class="fa-solid fa-plus"></i> New Article</button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="adminStatsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-newspaper"></i></div>
+                        <div class="stat-details">
+                            <h3>Total Articles</h3>
+                            <p class="stat-number" id="statTotalArticles">0</p>
+                            <span class="stat-change" style="color:var(--text-muted)">Since launch</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-eye"></i></div>
+                        <div class="stat-details">
+                            <h3>Total Views</h3>
+                            <p class="stat-number" id="statTotalViews">0</p>
+                            <span class="stat-change" style="color:var(--text-muted)">Since launch</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+                        <div class="stat-details">
+                            <h3>Comments</h3>
+                            <p class="stat-number" id="statTotalComments">0</p>
+                            <span class="stat-change" style="color:var(--text-muted)">Since launch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Write Article / Recent split -->
+                <div class="dashboard-grid" id="adminDashboardGrid">
+                    <!-- Quick Draft Form -->
+                    <div class="panel" id="adminPanelWrite">
+                        <div class="panel-header">
+                            <h3>Publish New Article</h3>
+                        </div>
+                        <form class="admin-form" id="publishForm">
+                            <div class="form-group">
+                                <label>Article Title</label>
+                                <input type="text" id="artTitle" placeholder="Enter an engaging headline" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="artCategory" required>
+                                        <option value="">Select Category</option>
+                                        <option value="news">News</option>
+                                        <option value="entertainment">Entertainment</option>
+                                        <option value="sports">Sports</option>
+                                        <option value="business">Business</option>
+                                        <option value="tech">Tech</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload Media File (Image or Video)</label>
+                                    <input type="file" id="artFileUpload" accept="image/*,video/*" style="padding: 9px 15px; cursor: pointer;">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:-5px; margin-bottom: 5px; text-align:center;">
+                                <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">— OR Provide a URL —</span>
+                            </div>
+                            <div class="form-row" style="margin-bottom: 15px;">
+                                <div class="form-group">
+                                    <input type="url" id="artMedia" placeholder="Paste YouTube link or Image URL...">
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:center; margin-top: 10px;">
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:var(--text-muted);">
+                                        <input type="checkbox" id="isVideo" style="width:auto; accent-color:var(--accent);"> Link is a Video
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Article Content</label>
+                                <textarea id="artContent" rows="6" placeholder="Write your article here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary w-100">Publish Article</button>
+                        </form>
+                    </div>
+
+                    <!-- Recent Articles Table -->
+                    <div class="panel" id="adminPanelArticles">
+                        <div class="panel-header">
+                            <h3>Recently Published</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminArticlesTable">
+                                    <!-- Dynamic rows will go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Categories Panel -->
+                    <div class="panel" id="adminPanelCategories" style="display: none;">
+                        <div class="panel-header">
+                            <h3>Manage Categories</h3>
+                            <button class="btn-primary" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-plus"></i> New Category</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Slug</th>
+                                        <th>Articles Count</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>News</strong></td>
+                                        <td style="color:var(--text-muted)">news</td>
+                                        <td>142</td>
+                                        <td class="td-actions">
+                                            <button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Entertainment</strong></td>
+                                        <td style="color:var(--text-muted)">entertainment</td>
+                                        <td>89</td>
+                                        <td class="td-actions">
+                                            <button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Sports</strong></td>
+                                        <td style="color:var(--text-muted)">sports</td>
+                                        <td>204</td>
+                                        <td class="td-actions">
+                                            <button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Users Panel -->
+                    <div class="panel" id="adminPanelUsers" style="display: none;">
+                        <div class="panel-header">
+                            <h3>Manage Users</h3>
+                            <button class="btn-primary" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-user-plus"></i> Invite User</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminUsersTable">
+                                    <!-- Dynamic users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Settings Panel -->
+                    <div class="panel" id="adminPanelSettings" style="display: none;">
+                        <div class="panel-header">
+                            <h3>Global Site Settings</h3>
+                        </div>
+                        <form class="admin-form" onsubmit="event.preventDefault(); alert('Settings Saved Successfully!');">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Site Name</label>
+                                    <input type="text" value="Active1NewsGH">
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Email</label>
+                                    <input type="email" value="contact@active1newsgh.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Site Tagline / Description</label>
+                                <textarea rows="3">Engaging, fast, and active news updates.</textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Theme Color (Accent)</label>
+                                    <div style="display:flex; gap:10px; margin-top:5px;">
+                                        <div style="width:30px; height:30px; background:#ff003c; border-radius:50%; border:2px solid #fff; cursor:pointer;"></div>
+                                        <div style="width:30px; height:30px; background:#3b82f6; border-radius:50%; cursor:pointer;"></div>
+                                        <div style="width:30px; height:30px; background:#10b981; border-radius:50%; cursor:pointer;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="border:none; border-top:1px solid var(--border-color); margin: 15px 0;">
+                            <button type="submit" class="btn-primary" style="width: max-content;">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
