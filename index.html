@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
@@ -16,6 +19,7 @@
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
     <!-- Floating Glassmorphism Nav -->
     <nav class="glass-nav" id="mainNav">
@@ -37,7 +41,7 @@
                 </button>
                 <button class="subscribe-btn" id="subscribeNavBtn">Subscribe</button>
                 <button class="menu-toggle" id="menuToggle"><i class="fa fa-bars"></i></button>
-                
+
                 <!-- Notification Dropdown anchored absolute inside nav-actions wrapper -->
                 <div id="notificationDropdown" class="notification-dropdown" style="display: none;">
                     <h4>Recent Alerts</h4>
@@ -64,7 +68,8 @@
 
         <!-- Hero Bento Grid -->
         <section class="bento-grid" id="bentoGrid">
-            <div style="grid-column:1/-1; text-align:center; padding: 100px 0; color:var(--text-muted); background:var(--bg-card); border-radius:16px;">
+            <div
+                style="grid-column:1/-1; text-align:center; padding: 100px 0; color:var(--text-muted); background:var(--bg-card); border-radius:16px;">
                 <i class="fa-solid fa-satellite-dish" style="font-size:3rem; margin-bottom:20px; opacity:0.5;"></i>
                 <h2>No Breaking News Yet</h2>
                 <p>Articles published from your Admin Dashboard will dynamically appear here in the Bento Grid.</p>
@@ -77,10 +82,11 @@
                 <h2>Latest Updates <span class="glow-line"></span></h2>
                 <a href="#" class="view-all">View All <i class="fa fa-arrow-right"></i></a>
             </div>
-            
+
             <div class="news-grid" id="latestNewsGrid">
                 <!-- Dynamic cards will be injected here by app.js -->
-                <p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No additional updates at this time.</p>
+                <p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No additional updates at this
+                    time.</p>
             </div>
         </section>
     </main>
@@ -92,13 +98,17 @@
                 <a href="#" class="logo">Active<span class="accent">1</span>NewsGH</a>
                 <p>Delivering the speed of now. Your premium source for breaking news, entertainment, and sports.</p>
                 <div class="social-links">
-                    <a href="https://wa.me/233241368799" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="https://www.instagram.com/active_1_tv_gh?igsh=aWE4Z3VheTR2ZTh2&utm_source=qr" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://youtube.com/@active1tv?si=ptnYsba9vWqPQHdw" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://www.tiktok.com/@active1tvgh?_r=1&_d=f28j3cfhkheh54&sec_uid=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&share_author_id=6997893858248049669&sharer_language=en&source=h5_m&u_code=dk7b1j4c79ak73&item_author_type=1&utm_source=whatsapp&tt_from=whatsapp&enable_checksum=1&utm_medium=ios&share_link_id=E959293A-E4F7-46FC-94B9-7FEA2B8840C1&user_id=6997893858248049669&sec_user_id=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&social_share_type=5&ug_btm=b0,b0&utm_campaign=client_share&share_app_id=1233" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://wa.me/233241368799" target="_blank" title="WhatsApp"><i
+                            class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/active_1_tv_gh?igsh=aWE4Z3VheTR2ZTh2&utm_source=qr"
+                        target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://youtube.com/@active1tv?si=ptnYsba9vWqPQHdw" target="_blank" title="YouTube"><i
+                            class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.tiktok.com/@active1tvgh?_r=1&_d=f28j3cfhkheh54&sec_uid=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&share_author_id=6997893858248049669&sharer_language=en&source=h5_m&u_code=dk7b1j4c79ak73&item_author_type=1&utm_source=whatsapp&tt_from=whatsapp&enable_checksum=1&utm_medium=ios&share_link_id=E959293A-E4F7-46FC-94B9-7FEA2B8840C1&user_id=6997893858248049669&sec_user_id=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&social_share_type=5&ug_btm=b0,b0&utm_campaign=client_share&share_app_id=1233"
+                        target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
                 </div>
             </div>
-            
+
             <div class="footer-widget">
                 <h3>Categories</h3>
                 <ul>
@@ -119,7 +129,7 @@
             </div>
         </div>
         <div class="footer-bottom container">
-            <p>&copy; 2026 Active1NewsGH. Designed for the future.</p>
+            <p>&copy; 2026 Active1NewsGH. Designed by Victor Adjei Yeboah.</p>
         </div>
     </footer>
 
@@ -142,25 +152,31 @@
                 <div class="modal-share-bar">
                     <span>SHARE THIS STORY:</span>
                     <div class="share-buttons">
-                        <a href="#" id="shareWhatsApp" target="_blank" class="share-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                        <a href="#" id="shareFacebook" target="_blank" class="share-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
-                        <a href="#" id="shareX" target="_blank" class="share-btn x-twitter"><i class="fa-brands fa-x-twitter"></i> X (Twitter)</a>
-                        <button id="shareTikTok" class="share-btn tiktok"><i class="fa-brands fa-tiktok"></i> TikTok</button>
-                        <button id="shareCopy" class="share-btn copy-link"><i class="fa-regular fa-copy"></i> Copy Link</button>
+                        <a href="#" id="shareWhatsApp" target="_blank" class="share-btn whatsapp"><i
+                                class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a href="#" id="shareFacebook" target="_blank" class="share-btn facebook"><i
+                                class="fa-brands fa-facebook"></i> Facebook</a>
+                        <a href="#" id="shareX" target="_blank" class="share-btn x-twitter"><i
+                                class="fa-brands fa-x-twitter"></i> X (Twitter)</a>
+                        <button id="shareTikTok" class="share-btn tiktok"><i class="fa-brands fa-tiktok"></i>
+                            TikTok</button>
+                        <button id="shareCopy" class="share-btn copy-link"><i class="fa-regular fa-copy"></i> Copy
+                            Link</button>
                     </div>
                 </div>
 
                 <!-- Comments Section -->
                 <div class="modal-comments-section">
                     <h3>💬 Comments <span class="comments-badge" id="modalCommentsCount">0</span></h3>
-                    
+
                     <form id="commentForm" class="comment-form">
                         <h4>Leave a Comment</h4>
                         <div class="form-group">
                             <input type="text" id="commenterName" placeholder="Your name (optional)">
                         </div>
                         <div class="form-group">
-                            <textarea id="commenterText" rows="3" placeholder="Write your comment here..." required></textarea>
+                            <textarea id="commenterText" rows="3" placeholder="Write your comment here..."
+                                required></textarea>
                         </div>
                         <button type="submit" class="btn-post-comment">POST COMMENT &rarr;</button>
                     </form>
@@ -179,9 +195,14 @@
             <button id="closeAboutModalBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-body">
                 <div class="about-info" style="text-align: center; margin-bottom: 25px;">
-                    <h2 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight:900; color:var(--text-main)">About <span class="accent" style="color:var(--accent)">Us</span></h2>
-                    <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted); margin-top: 15px; max-width: 600px; margin-left: auto; margin-right: auto;">
-                        <strong>Active1NewsGH</strong> / <strong>Active 1 TV GH</strong> is Ghana's premier dynamic digital news and sports broadcasting channel. We deliver verified breaking news, high-energy sports coverage, and cutting-edge entertainment stories directly to you, the moment they unfold.
+                    <h2
+                        style="font-family: var(--font-heading); font-size: 2.2rem; font-weight:900; color:var(--text-main)">
+                        About <span class="accent" style="color:var(--accent)">Us</span></h2>
+                    <p
+                        style="font-size: 1rem; line-height: 1.7; color: var(--text-muted); margin-top: 15px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        <strong>Active1NewsGH</strong> / <strong>Active 1 TV GH</strong> is Ghana's premier dynamic
+                        digital news and sports broadcasting channel. We deliver verified breaking news, high-energy
+                        sports coverage, and cutting-edge entertainment stories directly to you, the moment they unfold.
                     </p>
                 </div>
                 <div class="about-grid">
@@ -195,17 +216,20 @@
                         <h4>WhatsApp</h4>
                         <p>Chat directly</p>
                     </a>
-                    <a href="https://youtube.com/@active1tv?si=ptnYsba9vWqPQHdw" target="_blank" class="about-card youtube">
+                    <a href="https://youtube.com/@active1tv?si=ptnYsba9vWqPQHdw" target="_blank"
+                        class="about-card youtube">
                         <i class="fa-brands fa-youtube"></i>
                         <h4>YouTube</h4>
                         <p>@active1tv</p>
                     </a>
-                    <a href="https://www.tiktok.com/@active1tvgh?_r=1&_d=f28j3cfhkheh54&sec_uid=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&share_author_id=6997893858248049669&sharer_language=en&source=h5_m&u_code=dk7b1j4c79ak73&item_author_type=1&utm_source=whatsapp&tt_from=whatsapp&enable_checksum=1&utm_medium=ios&share_link_id=E959293A-E4F7-46FC-94B9-7FEA2B8840C1&user_id=6997893858248049669&sec_user_id=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&social_share_type=5&ug_btm=b0,b0&utm_campaign=client_share&share_app_id=1233" target="_blank" class="about-card tiktok">
+                    <a href="https://www.tiktok.com/@active1tvgh?_r=1&_d=f28j3cfhkheh54&sec_uid=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&share_author_id=6997893858248049669&sharer_language=en&source=h5_m&u_code=dk7b1j4c79ak73&item_author_type=1&utm_source=whatsapp&tt_from=whatsapp&enable_checksum=1&utm_medium=ios&share_link_id=E959293A-E4F7-46FC-94B9-7FEA2B8840C1&user_id=6997893858248049669&sec_user_id=MS4wLjABAAAAc3LkDDtxfcPWJIMdpDCSxEvl6X-GhljSortTCUrZnsTtFe8VDxmD-PdCvfJYsAWz&social_share_type=5&ug_btm=b0,b0&utm_campaign=client_share&share_app_id=1233"
+                        target="_blank" class="about-card tiktok">
                         <i class="fa-brands fa-tiktok"></i>
                         <h4>TikTok</h4>
                         <p>@active1tvgh</p>
                     </a>
-                    <a href="https://www.instagram.com/active_1_tv_gh?igsh=aWE4Z3VheTR2ZTh2&utm_source=qr" target="_blank" class="about-card instagram">
+                    <a href="https://www.instagram.com/active_1_tv_gh?igsh=aWE4Z3VheTR2ZTh2&utm_source=qr"
+                        target="_blank" class="about-card instagram">
                         <i class="fa-brands fa-instagram"></i>
                         <h4>Instagram</h4>
                         <p>@active_1_tv_gh</p>
@@ -220,12 +244,18 @@
         <div class="modal-card" style="max-width: 600px; padding: 35px;">
             <button id="closeSearchBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-body">
-                <h3 style="font-family: var(--font-heading); margin-bottom: 20px; font-weight:900; color:var(--text-main); font-size:1.6rem;"><i class="fa-solid fa-magnifying-glass" style="color:var(--accent);"></i> Search Articles</h3>
+                <h3
+                    style="font-family: var(--font-heading); margin-bottom: 20px; font-weight:900; color:var(--text-main); font-size:1.6rem;">
+                    <i class="fa-solid fa-magnifying-glass" style="color:var(--accent);"></i> Search Articles</h3>
                 <div class="search-input-wrapper" style="position:relative; margin-bottom: 20px;">
-                    <input type="text" id="articleSearchInput" placeholder="Type keywords here (e.g. sports, entertainment)..." style="width:100%; padding: 14px 20px; border-radius: 8px; border:1px solid #cbd5e1; font-size:1.1rem; outline:none; transition:border 0.3s; background:#f8fafc; color:var(--text-main);">
+                    <input type="text" id="articleSearchInput"
+                        placeholder="Type keywords here (e.g. sports, entertainment)..."
+                        style="width:100%; padding: 14px 20px; border-radius: 8px; border:1px solid #cbd5e1; font-size:1.1rem; outline:none; transition:border 0.3s; background:#f8fafc; color:var(--text-main);">
                 </div>
-                <div id="searchResultsList" style="display:flex; flex-direction:column; gap:12px; max-height: 350px; overflow-y:auto; padding-right:5px;">
-                    <p style="color:var(--text-muted); text-align:center; font-style:italic; margin-top:20px;">Type something to start searching...</p>
+                <div id="searchResultsList"
+                    style="display:flex; flex-direction:column; gap:12px; max-height: 350px; overflow-y:auto; padding-right:5px;">
+                    <p style="color:var(--text-muted); text-align:center; font-style:italic; margin-top:20px;">Type
+                        something to start searching...</p>
                 </div>
             </div>
         </div>
@@ -236,23 +266,45 @@
         <div class="modal-card" style="max-width: 500px; padding: 40px; text-align:center;">
             <button id="closeSubscribeBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-body">
-                <div style="font-size: 3.2rem; color: #ff003c; margin-bottom: 15px;"><i class="fa-regular fa-envelope-open"></i></div>
-                <h3 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight:900; margin-bottom: 10px; color:var(--text-main)">Join the Newsletter</h3>
-                <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6; margin-bottom: 25px;">Get the freshest breaking stories, exclusive sports features, and trending stories straight to your inbox daily!</p>
+                <div style="font-size: 3.2rem; color: #ff003c; margin-bottom: 15px;"><i
+                        class="fa-regular fa-envelope-open"></i></div>
+                <h3
+                    style="font-family: var(--font-heading); font-size: 1.8rem; font-weight:900; margin-bottom: 10px; color:var(--text-main)">
+                    Join the Newsletter</h3>
+                <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6; margin-bottom: 25px;">Get the
+                    freshest breaking stories, exclusive sports features, and trending stories straight to your inbox
+                    daily!</p>
                 <form id="modalSubscribeForm" style="display:flex; flex-direction:column; gap:15px; text-align:left;">
                     <div class="form-group" style="margin-bottom:0;">
-                        <input type="email" id="subscribeEmail" placeholder="Enter your email address" required style="width:100%; padding:12px 16px; border:1px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none; transition: border 0.3s; background:#f8fafc; color:var(--text-main)">
+                        <input type="email" id="subscribeEmail" placeholder="Enter your email address" required
+                            style="width:100%; padding:12px 16px; border:1px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none; transition: border 0.3s; background:#f8fafc; color:var(--text-main)">
                     </div>
                     <div class="form-group" style="margin-bottom:0;">
-                        <label style="font-weight:700; font-size:0.85rem; color:#64748b; text-transform:uppercase; margin-bottom:8px; display:block;">Select your interests</label>
+                        <label
+                            style="font-weight:700; font-size:0.85rem; color:#64748b; text-transform:uppercase; margin-bottom:8px; display:block;">Select
+                            your interests</label>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input type="checkbox" name="interest" value="news" checked style="accent-color:#ff003c"> News & Politics</label>
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input type="checkbox" name="interest" value="sports" checked style="accent-color:#ff003c"> Sports Coverage</label>
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input type="checkbox" name="interest" value="entertainment" style="accent-color:#ff003c"> Entertainment</label>
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input type="checkbox" name="interest" value="business" style="accent-color:#ff003c"> Business & Tech</label>
+                            <label
+                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
+                                    type="checkbox" name="interest" value="news" checked style="accent-color:#ff003c">
+                                News & Politics</label>
+                            <label
+                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
+                                    type="checkbox" name="interest" value="sports" checked style="accent-color:#ff003c">
+                                Sports Coverage</label>
+                            <label
+                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
+                                    type="checkbox" name="interest" value="entertainment" style="accent-color:#ff003c">
+                                Entertainment</label>
+                            <label
+                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
+                                    type="checkbox" name="interest" value="business" style="accent-color:#ff003c">
+                                Business & Tech</label>
                         </div>
                     </div>
-                    <button type="submit" class="btn-post-comment" style="width:100%; justify-content:center; padding: 14px; margin-top:10px;">SUBSCRIBE NOW &rarr;</button>
+                    <button type="submit" class="btn-post-comment"
+                        style="width:100%; justify-content:center; padding: 14px; margin-top:10px;">SUBSCRIBE NOW
+                        &rarr;</button>
                 </form>
             </div>
         </div>
@@ -260,4 +312,5 @@
 
     <script src="js/app.js"></script>
 </body>
+
 </html>
