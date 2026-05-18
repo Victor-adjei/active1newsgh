@@ -623,29 +623,56 @@ document.addEventListener('DOMContentLoaded', () => {
         modalSubscribeForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('subscribeEmail');
-            const firstNameInput = document.getElementById('subscribeFirstName');
-            const lastNameInput = document.getElementById('subscribeLastName');
-            
             const email = emailInput.value.trim();
-            const firstName = firstNameInput ? firstNameInput.value.trim() : '';
-            const lastName = lastNameInput ? lastNameInput.value.trim() : '';
-            
             if (!email) return;
+
+            // Collect selected categories
+            const interests = [];
+            const checkboxes = modalSubscribeForm.querySelectorAll('input[name="interest"]:checked');
+            checkboxes.forEach(cb => interests.push(cb.value));
 
             // Persist Subscriber state
             const subscriber = {
                 email: email,
-                firstName: firstName,
-                lastName: lastName,
+                categories: interests,
                 subscribedAt: Date.now()
             };
             localStorage.setItem('active1news_subscriber', JSON.stringify(subscriber));
 
             // Show Success Notification
-            alert(`🎉 Thank you for subscribing to Active1NewsGH!\n\nWelcome aboard, ${firstName || 'Reader'}!`);
-            
+            alert(`🎉 Thank you for subscribing to Active1NewsGH!\n\nEmail: ${email}\nCategories: ${interests.join(', ').toUpperCase()}\n\nYou are now signed up for premium notifications!`);
+
             // Close Modal
             if(closeSubscribeBtn) closeSubscribeBtn.click();
+        });
+    }
+
+    const footerSubscribeForm = document.getElementById('footerSubscribeForm');
+    if (footerSubscribeForm) {
+        footerSubscribeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('footerSubscribeEmail');
+            const email = emailInput.value.trim();
+            if (!email) return;
+
+            // Collect selected categories
+            const interests = [];
+            const checkboxes = footerSubscribeForm.querySelectorAll('input[name="footerInterest"]:checked');
+            checkboxes.forEach(cb => interests.push(cb.value));
+
+            // Persist Subscriber state
+            const subscriber = {
+                email: email,
+                categories: interests,
+                subscribedAt: Date.now()
+            };
+            localStorage.setItem('active1news_subscriber', JSON.stringify(subscriber));
+
+            // Show Success Notification
+            alert(`🎉 Thank you for subscribing to Active1NewsGH!\n\nEmail: ${email}\nCategories: ${interests.join(', ').toUpperCase()}\n\nYou are now signed up for premium notifications!`);
+            
+            // Reset form
+            footerSubscribeForm.reset();
         });
     }
 
