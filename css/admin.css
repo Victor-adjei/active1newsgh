@@ -345,7 +345,9 @@ a {
 .badge-business { background: rgba(0, 112, 243, 0.1); color: #0070f3; }
 .badge-ent { background: rgba(121, 40, 202, 0.1); color: #7928ca; }
 .badge-news { background: rgba(255, 0, 60, 0.1); color: #ff003c; }
+.badge-politics { background: rgba(255, 0, 60, 0.1); color: #ff003c; }
 .badge-sports { background: rgba(16, 185, 129, 0.1); color: #059669; }
+.badge-tech { background: rgba(121, 40, 202, 0.1); color: #7928ca; }
 
 .td-actions {
     display: flex;

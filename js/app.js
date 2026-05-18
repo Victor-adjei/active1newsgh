@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const tagColors = {
                 'news': 'tag-red',
+                'politics': 'tag-red',
                 'entertainment': 'tag-blue',
                 'sports': 'tag-green',
                 'business': 'tag-purple',
@@ -212,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get category matching text
             const categoryText = anchor.textContent.trim().toLowerCase();
             
-            if (categoryText === 'news') {
+            if (categoryText === 'home') {
                 window.renderArticles('all');
             } else {
                 window.renderArticles(categoryText);
@@ -288,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Match tag color
         const tagColors = {
             'news': 'tag-red',
+            'politics': 'tag-red',
             'entertainment': 'tag-blue',
             'sports': 'tag-green',
             'business': 'tag-purple',
@@ -621,24 +623,26 @@ document.addEventListener('DOMContentLoaded', () => {
         modalSubscribeForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('subscribeEmail');
+            const firstNameInput = document.getElementById('subscribeFirstName');
+            const lastNameInput = document.getElementById('subscribeLastName');
+            
             const email = emailInput.value.trim();
+            const firstName = firstNameInput ? firstNameInput.value.trim() : '';
+            const lastName = lastNameInput ? lastNameInput.value.trim() : '';
+            
             if (!email) return;
-
-            // Collect selected categories
-            const interests = [];
-            const checkboxes = modalSubscribeForm.querySelectorAll('input[name="interest"]:checked');
-            checkboxes.forEach(cb => interests.push(cb.value));
 
             // Persist Subscriber state
             const subscriber = {
                 email: email,
-                categories: interests,
+                firstName: firstName,
+                lastName: lastName,
                 subscribedAt: Date.now()
             };
             localStorage.setItem('active1news_subscriber', JSON.stringify(subscriber));
 
             // Show Success Notification
-            alert(`🎉 Thank you for subscribing to Active1NewsGH!\n\nEmail: ${email}\nCategories: ${interests.join(', ').toUpperCase()}\n\nYou are now signed up for premium notifications!`);
+            alert(`🎉 Thank you for subscribing to Active1NewsGH!\n\nWelcome aboard, ${firstName || 'Reader'}!`);
             
             // Close Modal
             if(closeSubscribeBtn) closeSubscribeBtn.click();

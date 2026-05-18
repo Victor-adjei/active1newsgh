@@ -26,7 +26,9 @@
         <div class="container nav-container">
             <a href="#" class="logo">Active<span class="accent">1</span>NewsGH</a>
             <div class="nav-links">
-                <a href="#news" class="active">News</a>
+                <a href="#" class="active">Home</a>
+                <a href="#politics">Politics</a>
+                <a href="#news">News</a>
                 <a href="#entertainment">Entertainment</a>
                 <a href="#sports">Sports</a>
                 <a href="#business">Business</a>
@@ -112,10 +114,10 @@
             <div class="footer-widget">
                 <h3>Categories</h3>
                 <ul>
-                    <li><a href="#">World News</a></li>
-                    <li><a href="#">Technology</a></li>
-                    <li><a href="#">Entertainment</a></li>
-                    <li><a href="#">Sports & Health</a></li>
+                    <li><a href="#politics">Politics</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#entertainment">Entertainment</a></li>
+                    <li><a href="#sports">Sports</a></li>
                 </ul>
             </div>
 
@@ -263,48 +265,48 @@
 
     <!-- Premium Subscribe Modal -->
     <div id="subscribeModal" class="modal-overlay" style="display: none;">
-        <div class="modal-card" style="max-width: 500px; padding: 40px; text-align:center;">
-            <button id="closeSubscribeBtn" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-card" style="max-width: 500px; padding: 40px 30px; text-align:left; background:#1e1e1e; border-radius:8px; border:none; box-shadow:0 10px 40px rgba(0,0,0,0.5); position:relative;">
+            <button id="closeSubscribeBtn" class="modal-close" style="background: rgba(255,255,255,0.1); color: #ffffff;"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-body">
-                <div style="font-size: 3.2rem; color: #ff003c; margin-bottom: 15px;"><i
-                        class="fa-regular fa-envelope-open"></i></div>
-                <h3
-                    style="font-family: var(--font-heading); font-size: 1.8rem; font-weight:900; margin-bottom: 10px; color:var(--text-main)">
-                    Join the Newsletter</h3>
-                <p style="color:var(--text-muted); font-size:0.95rem; line-height: 1.6; margin-bottom: 25px;">Get the
-                    freshest breaking stories, exclusive sports features, and trending stories straight to your inbox
-                    daily!</p>
-                <form id="modalSubscribeForm" style="display:flex; flex-direction:column; gap:15px; text-align:left;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-left: 6px solid #00801b; padding-left: 12px;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff; text-transform: uppercase; margin: 0; line-height: 1.2; letter-spacing: 0.5px;">
+                        Subscribe to Newsletter
+                    </h3>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 20px; color: #e2e8f0; font-size: 0.85rem; font-family: 'Inter', sans-serif;">
+                    <span style="color: #ff4b2b; font-weight: bold; margin-right: 4px;">*</span> indicates required
+                </div>
+
+                <form id="modalSubscribeForm" style="display:flex; flex-direction:column; gap:20px; text-align:left;">
                     <div class="form-group" style="margin-bottom:0;">
-                        <input type="email" id="subscribeEmail" placeholder="Enter your email address" required
-                            style="width:100%; padding:12px 16px; border:1px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none; transition: border 0.3s; background:#f8fafc; color:var(--text-main)">
+                        <label style="color: #ffffff; font-weight: 500; font-size: 0.95rem; margin-bottom: 8px; display: block; font-family: 'Inter', sans-serif;">
+                            Email Address <span style="color: #ff4b2b; font-weight: bold;">*</span>
+                        </label>
+                        <input type="email" id="subscribeEmail" required
+                            style="width:100%; padding:12px 16px; border:1px solid #ffffff; border-radius:4px; font-size:1rem; outline:none; background:#ffffff; color:#000000; font-family: 'Inter', sans-serif; transition: border-color 0.3s;">
                     </div>
+                    
                     <div class="form-group" style="margin-bottom:0;">
-                        <label
-                            style="font-weight:700; font-size:0.85rem; color:#64748b; text-transform:uppercase; margin-bottom:8px; display:block;">Select
-                            your interests</label>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                            <label
-                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
-                                    type="checkbox" name="interest" value="news" checked style="accent-color:#ff003c">
-                                News & Politics</label>
-                            <label
-                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
-                                    type="checkbox" name="interest" value="sports" checked style="accent-color:#ff003c">
-                                Sports Coverage</label>
-                            <label
-                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
-                                    type="checkbox" name="interest" value="entertainment" style="accent-color:#ff003c">
-                                Entertainment</label>
-                            <label
-                                style="display:flex; align-items:center; gap:8px; font-size:0.95rem; cursor:pointer; color:var(--text-main)"><input
-                                    type="checkbox" name="interest" value="business" style="accent-color:#ff003c">
-                                Business & Tech</label>
-                        </div>
+                        <label style="color: #ffffff; font-weight: 500; font-size: 0.95rem; margin-bottom: 8px; display: block; font-family: 'Inter', sans-serif;">
+                            First Name
+                        </label>
+                        <input type="text" id="subscribeFirstName"
+                            style="width:100%; padding:12px 16px; border:1px solid #ffffff; border-radius:4px; font-size:1rem; outline:none; background:#ffffff; color:#000000; font-family: 'Inter', sans-serif; transition: border-color 0.3s;">
                     </div>
-                    <button type="submit" class="btn-post-comment"
-                        style="width:100%; justify-content:center; padding: 14px; margin-top:10px;">SUBSCRIBE NOW
-                        &rarr;</button>
+
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="color: #ffffff; font-weight: 500; font-size: 0.95rem; margin-bottom: 8px; display: block; font-family: 'Inter', sans-serif;">
+                            Last Name
+                        </label>
+                        <input type="text" id="subscribeLastName"
+                            style="width:100%; padding:12px 16px; border:1px solid #ffffff; border-radius:4px; font-size:1rem; outline:none; background:#ffffff; color:#000000; font-family: 'Inter', sans-serif; transition: border-color 0.3s;">
+                    </div>
+
+                    <button type="submit"
+                        style="background:#00801b; color:#ffffff; font-weight:600; font-size:1rem; padding:12px 28px; border-radius:4px; border:none; cursor:pointer; font-family:'Inter', sans-serif; transition:background 0.3s; margin-top:10px; align-self: flex-start;">
+                        Subscribe
+                    </button>
                 </form>
             </div>
         </div>

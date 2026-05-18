@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         adminTable.innerHTML = articles.map((article) => {
             const badgeClasses = {
                 'news': 'badge-news',
+                'politics': 'badge-politics',
                 'entertainment': 'badge-ent',
                 'sports': 'badge-sports',
                 'business': 'badge-business',
