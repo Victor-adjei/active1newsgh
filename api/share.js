@@ -23,9 +23,17 @@ export default async function handler(req, res) {
       const article = articles[0];
       const title = escapeHtml(article.title);
       const description = escapeHtml(truncateString(article.content, 150));
-      const imageUrl = article.mediaUrl || 'https://active1newsgh.com/logo.png';
+      
+      let imageUrl = article.mediaUrl || 'https://active1newsgh.com/logo.png';
+      // WhatsApp and Facebook DO NOT support base64 images. Ensure it's absolute URL.
+      if (imageUrl.startsWith('data:')) {
+          imageUrl = 'https://active1newsgh.com/logo.png';
+      } else if (!imageUrl.startsWith('http')) {
+          imageUrl = `https://active1newsgh.com/${imageUrl.replace(/^\//, '')}`;
+      }
       
       const shareUrl = `https://active1newsgh.com/?story=${story}`;
+      const redirectUrl = `/?client=1&story=${story}`;
 
       const html = `<!DOCTYPE html>
 <html lang="en">
@@ -48,10 +56,13 @@ export default async function handler(req, res) {
   <meta name="twitter:image" content="${imageUrl}" />
   
   <!-- Fallback Redirect for safety -->
-  <meta http-equiv="refresh" content="0;url=/?story=${story}" />
+  <meta http-equiv="refresh" content="0;url=${redirectUrl}" />
 </head>
 <body>
-  <p>Redirecting to <a href="/?story=${story}">${title}</a>...</p>
+  <p>Redirecting to <a href="${redirectUrl}">${title}</a>...</p>
+  <script>
+      window.location.replace("${redirectUrl}");
+  </script>
 </body>
 </html>`;
 

@@ -6,11 +6,12 @@
         {
           "type": "query",
           "key": "story"
-        },
+        }
+      ],
+      "missing": [
         {
-          "type": "header",
-          "key": "user-agent",
-          "value": "(?i).*whatsapp.*|.*facebookexternalhit.*|.*twitterbot.*|.*telegram.*|.*slack.*|.*discord.*|.*googlebot.*|.*crawler.*"
+          "type": "query",
+          "key": "client"
         }
       ],
       "destination": "/api/share"
