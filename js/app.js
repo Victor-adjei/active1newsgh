@@ -52,6 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cache it globally for search and detailed viewing without multiple fetch hits
         window.loadedArticles = savedArticles;
 
+        // Auto-open deep-linked story on initial page load
+        if (window.renderArticles.isFirstRun === undefined) {
+            window.renderArticles.isFirstRun = false;
+            const urlParams = new URLSearchParams(window.location.search);
+            const storyId = urlParams.get('story');
+            if (storyId) {
+                // Ensure we open it after the current call stack completes so rendering is finished
+                setTimeout(() => {
+                    if (typeof window.openArticleDetail === 'function') {
+                        window.openArticleDetail(storyId);
+                    }
+                }, 100);
+            }
+        }
+
         if (savedArticles.length === 0) {
             bentoGrid.innerHTML = '';
             latestNewsGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); margin-top:40px;">No articles published yet.</p>`;
@@ -336,10 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const tiktokBtn = document.getElementById('shareTikTok');
         const copyBtn = document.getElementById('shareCopy');
         
-        // Use clean sharing URL (simulation fallback if running locally)
-        const shareUrl = window.location.href.startsWith('file:') 
+        // Use clean sharing URL with deep link parameter
+        const baseUrl = window.location.href.startsWith('file:') 
             ? 'https://active1newsgh.com' 
             : window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?story=${article.timestamp}`;
         const shareTitle = article.title;
         
         if(whatsappBtn) whatsappBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + shareUrl)}`;

@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "story"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*whatsapp.*|.*facebookexternalhit.*|.*twitterbot.*|.*telegram.*|.*slack.*|.*discord.*|.*googlebot.*|.*crawler.*"
+        }
+      ],
+      "destination": "/api/share"
+    }
+  ]
+}
