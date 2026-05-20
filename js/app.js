@@ -795,4 +795,37 @@ document.addEventListener('DOMContentLoaded', () => {
             renderAlertStates();
         }
     }
+
+    // === DYNAMIC LIVE TICKER RENDER ===
+    function escapeHTML(str) {
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function renderLiveTicker() {
+        const tickerContent = document.querySelector('.ticker-content');
+        if (!tickerContent) return;
+
+        const defaultTicker = [
+            "Global markets surge following tech announcements",
+            "Championship finals scheduled for this weekend",
+            "New AI models break records in efficiency"
+        ];
+        
+        let tickerItems = JSON.parse(localStorage.getItem('active1news_ticker'));
+        if (!tickerItems || !Array.isArray(tickerItems) || tickerItems.length === 0) {
+            tickerItems = defaultTicker;
+            localStorage.setItem('active1news_ticker', JSON.stringify(defaultTicker));
+        }
+
+        tickerContent.innerHTML = tickerItems
+            .map(item => `<span>${escapeHTML(item)}</span>`)
+            .join('<span class="separator">•</span>');
+    }
+
+    renderLiveTicker();
 });

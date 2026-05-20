@@ -23,6 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('active1news_users', JSON.stringify(defaultUsers));
     }
 
+    // Initialize Ticker LocalStorage if empty
+    const defaultTicker = [
+        "Global markets surge following tech announcements",
+        "Championship finals scheduled for this weekend",
+        "New AI models break records in efficiency"
+    ];
+    if (!localStorage.getItem('active1news_ticker')) {
+        localStorage.setItem('active1news_ticker', JSON.stringify(defaultTicker));
+    }
+
+    function getTickerHeadlines() {
+        return JSON.parse(localStorage.getItem('active1news_ticker')) || [];
+    }
+
+    function saveTickerHeadlines(headlines) {
+        localStorage.setItem('active1news_ticker', JSON.stringify(headlines));
+    }
+
     function getArticles() {
         return JSON.parse(localStorage.getItem('active1news_articles')) || [];
     }
@@ -492,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const panelCategories = document.getElementById('adminPanelCategories');
     const panelUsers = document.getElementById('adminPanelUsers');
     const panelSettings = document.getElementById('adminPanelSettings');
+    const panelTicker = document.getElementById('adminPanelTicker');
     
     const pageHeaderTitle = document.querySelector('.page-header h2');
 
@@ -501,6 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(panelCategories) panelCategories.style.display = 'none';
         if(panelUsers) panelUsers.style.display = 'none';
         if(panelSettings) panelSettings.style.display = 'none';
+        if(panelTicker) panelTicker.style.display = 'none';
     };
 
     if(sidebarLinks.length > 0) {
@@ -541,6 +561,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if(view === 'settings') {
                         pageHeaderTitle.innerText = 'Global Settings';
                         panelSettings.style.display = 'block';
+                    } else if(view === 'ticker') {
+                        pageHeaderTitle.innerText = 'Live Ticker Manager';
+                        panelTicker.style.display = 'block';
+                        renderTickerManager();
                     }
                 }
 
@@ -659,6 +683,72 @@ document.addEventListener('DOMContentLoaded', () => {
             if (confirm('Are you sure you want to log out from the admin panel?')) {
                 localStorage.removeItem('active1news_logged_in');
                 window.location.replace('login.html');
+            }
+        });
+    }
+
+    // === LIVE TICKER MANAGER IMPLEMENTATION ===
+    function escapeHTML(str) {
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function renderTickerManager() {
+        const tbody = document.getElementById('tickerHeadlinesTableBody');
+        if (!tbody) return;
+
+        const headlines = getTickerHeadlines();
+        if (headlines.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: var(--text-muted); padding: 20px;">No ticker headlines set. Add a headline above to show in the scrolling banner!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = headlines.map((headline, index) => `
+            <tr>
+                <td><strong>${escapeHTML(headline)}</strong></td>
+                <td class="td-actions" style="text-align: right;">
+                    <button class="btn-icon" onclick="editTickerHeadline(${index})" title="Edit Headline"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-icon danger" onclick="deleteTickerHeadline(${index})" title="Delete Headline"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    window.editTickerHeadline = function(index) {
+        const headlines = getTickerHeadlines();
+        const current = headlines[index];
+        const updated = prompt("Edit headline:", current);
+        if (updated !== null && updated.trim() !== "") {
+            headlines[index] = updated.trim();
+            saveTickerHeadlines(headlines);
+            renderTickerManager();
+        }
+    };
+
+    window.deleteTickerHeadline = function(index) {
+        if (confirm("Are you sure you want to delete this headline?")) {
+            const headlines = getTickerHeadlines();
+            headlines.splice(index, 1);
+            saveTickerHeadlines(headlines);
+            renderTickerManager();
+        }
+    };
+
+    const addTickerForm = document.getElementById('addTickerForm');
+    if (addTickerForm) {
+        addTickerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('newTickerHeadline');
+            if (input && input.value.trim() !== "") {
+                const headlines = getTickerHeadlines();
+                headlines.push(input.value.trim());
+                saveTickerHeadlines(headlines);
+                input.value = "";
+                renderTickerManager();
             }
         });
     }

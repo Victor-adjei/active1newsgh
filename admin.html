@@ -38,6 +38,7 @@
                 <a href="#" data-view="write"><i class="fa-solid fa-pen-to-square"></i> Write New Post</a>
                 <a href="#" data-view="categories"><i class="fa-solid fa-layer-group"></i> Categories</a>
                 <a href="#" data-view="users"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="#" data-view="ticker"><i class="fa-solid fa-satellite-dish"></i> Live Ticker</a>
                 <a href="#" data-view="settings"><i class="fa-solid fa-gear"></i> Settings</a>
             </nav>
             <div class="sidebar-footer" style="flex-direction: column; align-items: flex-start; gap: 10px;">
@@ -252,6 +253,35 @@
                                 </thead>
                                 <tbody id="adminUsersTable">
                                     <!-- Dynamic users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Live Ticker Panel -->
+                    <div class="panel" id="adminPanelTicker" style="display: none;">
+                        <div class="panel-header">
+                            <h3>Manage Live Ticker</h3>
+                        </div>
+                        <form class="admin-form" id="addTickerForm">
+                            <div class="form-group">
+                                <label>Add New Scrolling Headline</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="newTickerHeadline" placeholder="Enter an engaging alert or headline..." required style="flex: 1;">
+                                    <button type="submit" class="btn-primary" style="white-space: nowrap; width: auto; padding: 0 20px;"><i class="fa-solid fa-plus"></i> Add Headline</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Headline Text</th>
+                                        <th style="width: 100px; text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tickerHeadlinesTableBody">
+                                    <!-- Dynamic rows will go here -->
                                 </tbody>
                             </table>
                         </div>
