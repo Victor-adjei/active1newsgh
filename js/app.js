@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { data, error } = await supabase
                     .from('articles')
                     .select('*')
+                    .neq('category', 'system_ticker')
                     .order('timestamp', { ascending: false });
                 if (!error && data) {
                     savedArticles = data;
@@ -822,7 +823,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/'/g, "&#039;");
     }
 
-    function renderLiveTicker() {
+    async function renderLiveTicker() {
         const tickerContent = document.querySelector('.ticker-content');
         if (!tickerContent) return;
 
@@ -832,10 +833,32 @@ document.addEventListener('DOMContentLoaded', () => {
             "New AI models break records in efficiency"
         ];
         
-        let tickerItems = JSON.parse(localStorage.getItem('active1news_ticker'));
+        let tickerItems = [];
+        
+        // 1. Fetch from Supabase (Global synchronization)
+        if (supabase) {
+            try {
+                const { data, error } = await supabase.from('articles').select('content').eq('timestamp', 1);
+                if (!error && data && data.length > 0) {
+                    tickerItems = JSON.parse(data[0].content);
+                }
+            } catch (err) {
+                console.error('Ticker fetch error:', err);
+            }
+        }
+        
+        // 2. Fallback to LocalStorage (PC that created it, or offline)
+        if (!tickerItems || tickerItems.length === 0) {
+            tickerItems = JSON.parse(localStorage.getItem('active1news_ticker'));
+        }
+        
+        // 3. Fallback to default
         if (!tickerItems || !Array.isArray(tickerItems) || tickerItems.length === 0) {
             tickerItems = defaultTicker;
             localStorage.setItem('active1news_ticker', JSON.stringify(defaultTicker));
+        } else {
+            // Sync local cache
+            localStorage.setItem('active1news_ticker', JSON.stringify(tickerItems));
         }
 
         tickerContent.innerHTML = tickerItems

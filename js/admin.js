@@ -39,6 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveTickerHeadlines(headlines) {
         localStorage.setItem('active1news_ticker', JSON.stringify(headlines));
+        if (supabase) {
+            supabase.from('articles').select('*').eq('timestamp', 1).then(({data}) => {
+                if (data && data.length > 0) {
+                    supabase.from('articles').update({ content: JSON.stringify(headlines) }).eq('timestamp', 1).then();
+                } else {
+                    supabase.from('articles').insert([{ timestamp: 1, title: 'SYSTEM_TICKER', category: 'system_ticker', content: JSON.stringify(headlines), mediaUrl: '', isVideo: false, comments: [] }]).then();
+                }
+            });
+        }
     }
 
     function getArticles() {
@@ -58,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { data, error } = await supabase
                     .from('articles')
                     .select('*')
+                    .neq('category', 'system_ticker')
                     .order('timestamp', { ascending: false });
                 if (!error && data) {
                     articles = data;

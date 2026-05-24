@@ -54,9 +54,6 @@ export default async function handler(req, res) {
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="${imageUrl}" />
-  
-  <!-- Fallback Redirect for safety -->
-  <meta http-equiv="refresh" content="0;url=${redirectUrl}" />
 </head>
 <body>
   <p>Redirecting to <a href="${redirectUrl}">${title}</a>...</p>

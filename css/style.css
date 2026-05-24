@@ -182,6 +182,10 @@ a {
     align-items: center;
     gap: 8px;
     white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--bg-card);
+    z-index: 2;
+    position: relative;
 }
 .pulse-dot {
     width: 8px;
