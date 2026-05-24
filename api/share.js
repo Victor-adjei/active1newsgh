@@ -32,8 +32,8 @@ export default async function handler(req, res) {
           imageUrl = `https://active1newsgh.com/${imageUrl.replace(/^\//, '')}`;
       }
       
-      const shareUrl = `https://active1newsgh.com/?story=${story}`;
-      const redirectUrl = `/?client=1&story=${story}`;
+      const shareUrl = `https://active1newsgh.com/share?story=${story}`;
+      const redirectUrl = `/?story=${story}`;
 
       const html = `<!DOCTYPE html>
 <html lang="en">

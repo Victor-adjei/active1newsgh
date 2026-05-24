@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseUrl = window.location.href.startsWith('file:') 
             ? 'https://active1newsgh.com' 
             : window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}?story=${article.timestamp}`;
+        const shareUrl = `${baseUrl}share?story=${article.timestamp}`;
         const shareTitle = article.title;
         
         if(whatsappBtn) whatsappBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + ' - ' + shareUrl)}`;
